@@ -1,12 +1,20 @@
 const express = require('express');
 const fs = require('fs');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
 app.use(bodyParser.json());
 
 const port = 3000;
 const dataFile = '../data/data.json';
+
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  })
+);
 
 app.get('/', (req, res) => {
   res.send('API works');

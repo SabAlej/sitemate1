@@ -1,5 +1,13 @@
+import Header from './components/Header';
+import IssuesTable from './components/IssuesTable';
+
 function App() {
-  return <>HELLO</>;
+  return (
+    <>
+      <Header />
+      <IssuesTable />
+    </>
+  );
 }
 
 export default App;
