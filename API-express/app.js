@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const { log } = require('console');
 
 const app = express();
 app.use(bodyParser.json());
@@ -55,22 +56,29 @@ app.post('/create', (req, res) => {
 app.put('/:id', (req, res) => {
   const id = req.params.id;
   const updatedIssue = req.body;
+  console.log(updatedIssue, id, 'updatedIssue');
   fs.readFile(dataFile, (err, data) => {
     if (err) {
       console.error(err);
       res.status(502).json({ message: 'Error reading data' });
     } else {
       const jsonData = JSON.parse(data);
-      const index = jsonData.findIndex(issue => issue.id === id);
-      jsonData[index] = updatedIssue;
-      fs.writeFile(dataFile, JSON.stringify(jsonData), err => {
-        if (err) {
-          console.error(err);
-          res.status(502).json({ message: 'Error writing data' });
-        } else {
-          res.json(updatedIssue);
-        }
-      });
+      const index = jsonData.findIndex(
+        issue => String(issue.id) === String(id)
+      );
+      if (index !== -1) {
+        jsonData[index] = updatedIssue;
+        fs.writeFile(dataFile, JSON.stringify(jsonData), err => {
+          if (err) {
+            console.error(err);
+            res.status(502).json({ message: 'Error writing data' });
+          } else {
+            res.json(updatedIssue);
+          }
+        });
+      } else {
+        res.status(404).json({ message: 'Issue not found' });
+      }
     }
   });
 });
