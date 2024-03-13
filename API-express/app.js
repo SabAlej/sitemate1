@@ -6,6 +6,7 @@ const app = express();
 app.use(bodyParser.json());
 
 const port = 3000;
+const dataFile = '../data/data.json';
 
 app.get('/', (req, res) => {
   res.send('API works');
